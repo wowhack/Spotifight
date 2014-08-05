@@ -6,26 +6,78 @@
 
 <body>
   {{> generation}}
+  {{> players}}
   {{> cards}}
 </body>
 
 <template name="generation">
-
   User ID: <input type='text' id="userID"><br>
   Playlist ID: <input type ='text'  id="playlistID"><br>
   <input id='initButton' type='button' value ='Trollolol'>
+</template>
 
+<template name="players">
+  <div id="greyBG">
+    <div id="loginBox"> 
+      {{#each players}}
+        {{#if isUser}}
+          <p class="playerLabel">{{username}}</p>
+        {{/if}}
+       {{/each}}
+      <hr size="1" color="black">
+      <div id="loginInfo">
+        <p class="loginLabel">Username:</p> <input id="username" type="text" value="" placeholder="...">
+      </div>
+    </div>
+  </div>
 </template>
 
 <template name="cards">
-  <div id="board">  
-    {{#each cards}}
-      <div class="card">
-        <span class="cardname">{{cardname}}</span>
-        <div class="portrait" style="background-size: cover; background-position:center; background-image: url(' {{url}} ');"> </div>
-        <span class="attack">{{attack}}</span>
-        <span class="defense">{{defense}}</span>
+  <div id="backg">
+    <div id="board">  
+      <div id="yourHand"> <p class="player">Player One</p>
+        <div id="tempCard" style="display: none; position: absolute;"> </div>
+        <ul id="cardList">
+          {{#each cards}}
+          <li>
+            <div class="card">
+              <span class="cardname">{{cardname}}</span>
+              <div class="portrait" style="background-image: url(' {{url}} ');"> </div>
+              <span class="attack">{{attack}}</span>
+              <span class="defense">{{defense}}</span>
+            </div>
+            </li>
+          {{/each}}
+        </ul>
       </div>
-    {{/each}}
+      <div id="sharedArea">
+        <div id="yourBattleArea">
+          <div id="playerOneActive" class="activeCard"> 
+            <span class="cardname">[noname]</span>
+            <div class="portrait" style="background-size: cover; background-position:center;"> 
+              <p>Choose your card.</p>
+            </div>
+            <span class="attack">/</span>
+            <span class="defense">/</span>
+          </div>
+        </div>
+        <div id="choices">
+          <input id="battleButton" class="inactiveButton confirmButton" type="button" value="Ready for battle">
+        </div>
+        <div id="opponentChoice"> 
+          <div id="playerTwoActive" class="hiddencard"> </div>
+        </div>
+      </div>
+
+      <div id="opponentArea"> <p class="player">Player Two</p>
+        <ul id="cardList">
+          <li><div class="hiddencard"> </div></li>
+          <li><div class="hiddencard"> </div></li>
+          <li><div class="hiddencard"> </div></li>
+          <li><div class="hiddencard"> </div></li>
+          <li><div class="hiddencard"> </div></li>
+        </ul>
+      </div>
+    </div>
   </div>
 </template>

@@ -1,58 +1,205 @@
 
-#board {
-	background: #efefef;
+/* Positioning ---------------- */
+
+body {
+	margin: 0;
+	text-align: center;
 }
+
+<<<<<<< HEAD
+#greyBG {
+	display: block;
+	position: absolute;
+	background: rgba(0,0,0,0.6);
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+}
+
+#loginBox {
+	display: block;
+	position: absolute;
+	padding: 20px;
+	width: 300px;
+	z-index: 4;
+	border: 1px solid #eee;
+	background: white;
+	left: 40%;
+	top: 30%;
+}
+
+.loginLabel {
+	font: 0.9em Helvetica;
+	font-weight: bold;
+	display: block;
+	float: left;
+	margin: 0 15px 0 0;
+	padding: 6px 0;
+}
+
+.playerLabel {
+	display: block;
+	border: 1px solid black;
+	padding: 8px 0;
+}
+
+.chosenPlayer {
+	background: #242424;
+	font-weight: bold;
+	color: white;
+}
+
+#username {
+	margin: 0;
+	padding: 6px;	
+}
+.player {
+	font-size: 0.7em Helvetica;
+	margin: 0;
+	padding: 0.6em 0;
+}
+
+#backg {
+	display: inline-block;
+	position: relative;
+	width: 1000px;
+}
+
+#board {
+	display: block;
+	margin: 0;
+	width: 100%;
+	height: 800px;
+	background: #efefef;
+	border-left: 1px solid #ddd;
+	border-right: 1px solid #ddd;
+}
+
+#tempCard{
+	z-index: 2;
+}
+
+#sharedArea {
+	display: block;
+	position: relative;
+	float: left;
+	padding-top: 200px;
+	height: 600px;
+	width: 656px;
+	text-align: center;
+}
+
+#opponentArea {
+	position: relative;
+	display: block;
+	float: left;
+}
+
+#choices {
+	display: inline-block;
+	padding: 20px;
+}
+
+.confirmButton {
+	width: 200px;
+	height: 4em;
+	font: 0.8em Helvetica;
+	font-weight: bold;
+	text-shadow: 1px 0 0 #242424;
+	color: white;
+	background: #444;
+	border: 0;
+	border-bottom: 2px solid #242424;
+	border-right: 2px solid #242424;
+}
+
+.inactiveButton {
+	color: rgba(0,0,0,0);
+	text-shadow: 0 0 0;
+}
+
+.activeCard p {
+	display: block;
+	position: absolute;
+	top: 40%;
+	left: 20%;
+}
+
+#yourHand {
+	position: relative;
+	display: block;
+	float: left;
+}
+
+#cardList {
+	list-style-type: none;
+	margin: 0;
+	padding: 0px 10px 0 10px;
+}
+
+/* Positioning end ------------ */
 
 
 /* Cardstuff ------------------------------ */ 
-.card {
-	width: 200px;
-	height: 300px;
-	margin: 20px;
-	border: 1px solid #c0c0c0;
+.card,
+.activeCard,
+.hiddencard,
+#tempCard {
+	width: 150px;
+	height: 150px;
+	border: 1px solid #242424;
 	display: inline-block;
 	background: #fff;
 	font: 0.7em Helvetica;
 	position: relative;
 }
 
+.hiddencard {
+	background: #444;
+}
+
 .cardname,
 .attack,
 .defense {
+	background: #444;
+	z-index: 1;
 	display: block;
 	position: absolute;
 	text-align: center;
 	vertical-align: middle;
 	font-weight: bold;
+	color: white;
 }
 
 .portrait {
-	top: 40px;
 	position: absolute;
 	width: 100%;
-	height: 260px;
+	height: 100%;
+	background-size: cover; 
+	background-position:center; 
 }
 
 .attack,
 .defense {
-	background: #fff;
 	padding: 1em;
 	font-size: 1.3em;
-	border: 1px solid #eee;
+	border-top: 1px solid #242424;
 }
 
 .cardname {
 	top: 0;
 	text-transform: uppercase;
-	width: 100%;
-	padding-top: 0.6em;
-	height: 30px;
+	width: 90%;
+	border-bottom: 1px solid #242424;
+	padding: 0.8em 5%;
 }
 .attack {
+	border-right: 1px solid #242424;
 	left: 0;
 	bottom: 0;
 }
 .defense {
+	border-left: 1px solid #242424;
 	right: 0;
 	bottom: 0;
 }
