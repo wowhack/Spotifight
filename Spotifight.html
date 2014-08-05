@@ -10,14 +10,30 @@
 </body>
 
 <template name="cards">
-  <div id="board">  
-    {{#each cards}}
-      <div class="card">
-        <span class="cardname">{{cardname}}</span>
-        <div class="portrait" style="background-size: cover; background-position:center; background-image: url(' {{url}} ');"> </div>
-        <span class="attack">{{attack}}</span>
-        <span class="defense">{{defense}}</span>
+  <div id="backg">
+    <div id="board">  
+      <div id="sharedArea">
+        <div class="activeCard"> 
+          <span class="cardname"></span>
+          <div class="portrait" style="background-size: cover; background-position:center;"> </div>
+          <span class="attack"></span>
+          <span class="defense"></span>
+        </div>
+        <div id="choices">
+          <input class="confirmButton" type="button" value="Choose for Battle">
+        </div>
       </div>
-    {{/each}}
+      <div id="yourHand">
+        {{#each cards}}
+          <div class="card">
+            <span class="cardname">{{cardname}}</span>
+            <div class="portrait" style="background-size: cover; background-position:center; background-image: url(' {{url}} ');"> </div>
+            <span class="attack">{{attack}}</span>
+            <span class="defense">{{defense}}</span>
+          </div>
+        {{/each}}
+        <div id="pusher" style="width: 100%; display: inline-block;"> </div>
+      </div>
+    </div>
   </div>
 </template>

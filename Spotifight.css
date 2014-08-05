@@ -1,14 +1,81 @@
 
+/* Positioning ---------------- */
+
+body {
+	margin: 0;
+	text-align: center;
+}
+
+#backg {
+	display: inline-block;
+	position: relative;
+	margin: 0 auto;
+
+	width: 900px;
+}
+
+#sharedArea {
+	display: block;
+	position: relative;
+	height: 300px;
+	padding: 20px 0;
+	text-align: center;
+}
+
+#choices {
+	display: inline-block;
+	position: absolute;
+	top: 35%;
+	height: 200px;
+	padding: 20px;
+}
+
+.confirmButton {
+	width: 200px;
+	height: 4em;
+	font: 1em Helvetica;
+	color: white;
+	background: #c0c0c0;
+	border: 0;
+	border-bottom: 2px solid #a0a0a0;
+	border-right: 2px solid #a0a0a0;
+}
+
+.activeCard p {
+	display: block;
+	position: absolute;
+	top: 50%;
+	left: 5%;
+}
+
+#yourHand {
+	display: block;
+	text-align: justify;
+	margin: 20px 100px 0 100px;
+}
+
+/* Positioning end ------------ */
+
+/* A game board ------------------------------ */ 
+
 #board {
+	display: block;
+	margin: 0;
+	width: 100%;
+	height: 1000px;
 	background: #efefef;
+	border-right: 10px solid black;
 }
 
 
+/* A game board end -------------------------- */ 
+
+
 /* Cardstuff ------------------------------ */ 
-.card {
+.card,
+.activeCard {
 	width: 200px;
 	height: 300px;
-	margin: 20px;
 	border: 1px solid #c0c0c0;
 	display: inline-block;
 	background: #fff;
@@ -45,7 +112,7 @@
 	top: 0;
 	text-transform: uppercase;
 	width: 100%;
-	padding-top: 0.6em;
+	padding-top: 1em;
 	height: 30px;
 }
 .attack {
