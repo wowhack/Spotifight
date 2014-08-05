@@ -5,6 +5,7 @@ var clientID = "6da341adbed94c3ea669dfa249804410";
 var clientSecret = "449b5590a223410dbf402fe7e174199b";
 var redirectURI = 'http://localhost:3000'; // Your redirect uri
 
+
 if (Meteor.isClient) {
   var buttonEnabled = false;
   var allowRemoval = false;
@@ -54,8 +55,7 @@ if (Meteor.isClient) {
 
   Template.generation.events({
     'click #initButton': function(event) {
-      console.log("ttjo");
-      initiate();
+      addCard ($("#songname").val());
     }
   });
 
@@ -160,6 +160,23 @@ if (Meteor.isClient) {
 
   /* --------------------------- */
 
+  }
+
+  function addCard(artist) {
+    // fetch my public playlists
+    $.ajax({
+        url: 'https://api.spotify.com/v1/search',
+        data: {
+          q: artist,
+          type: 'track'
+        },
+        success: function(response) {         
+          console.log(response);
+          var tracks = response.tracks;
+          track = tracks.items[0]
+          Cards.insert({cardname: track.name, attack: track.popularity, defense: 100 - track.popularity, url: track.album.images[0].url});  
+        }
+    });
 }
 
 if (Meteor.isServer) {
@@ -167,57 +184,4 @@ if (Meteor.isServer) {
     Cards.remove( {} );
     Players.remove( {} );
   });
-
-}
-
-function initiate() {
-  console.log("tjenis");
- var user_id = $('#userID').val();
- var playlist_id = $('#playlistID').val(); 
- console.log("din mamma");
- 
- $.ajax({
-  url: 'https://accounts.spotify.com/authorize',
-  headers : {'Access-Control-Allow-Origin': redirectURI},
-  data: {
-    client_id : clientID,
-    response_type : 'code',
-    redirect_uri: redirectURI
-  },
-  success: function(response){ 
-    $.ajax({
-      url: 'https://accounts.spotify.com/api/token',
-      crossDomain: true,
-      data: {
-        grant_type : 'authorization_code',
-        code : response.code,
-        redirect_uri : redirectURI,
-        client_id : clientID,
-        client_secret : clientSecret
-      },
-      success: function(response) {
-        console.log(response)
-        var accessToken = response.access_token;
-        generateCards(user_id,playlist_id,accessToken);
-      }
-    })
-  }
- })
-}
-
-function generateCards(user_id,playlist_id,accessToken) {
-  console.log("nein");
-  $.ajax({
-                url: 'https://api.spotify.com/v1/users/' + user_id + '/playlist/' + playlist_id + '/tracks',
-                headers: {
-                    'Authorization': 'Bearer ' + accessToken
-                },
-                success: function(response) {
-                    console.log(response);
-                    tracks = response.items
-                    for (var track in tracks) {
-                      Cards.insert ({cardname: track.name, attack: track.popularity, defense: (100 - track.popularity), url: "lulz.com"})
-                    }
-                }
-            });
 }
