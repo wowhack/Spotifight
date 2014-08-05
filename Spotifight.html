@@ -1,13 +1,21 @@
 <head>
   <title>Spotifight</title>
   <script> 
-
   </script>
 </head>
 
 <body>
+  {{> generation}}
   {{> cards}}
 </body>
+
+<template name="generation">
+
+  User ID: <input type='text' id="userID"><br>
+  Playlist ID: <input type ='text'  id="playlistID"><br>
+  <input id='initButton' type='button' value ='Trollolol'>
+
+</template>
 
 <template name="cards">
   <div id="board">  
