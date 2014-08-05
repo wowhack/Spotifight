@@ -1,36 +1,54 @@
 Cards = new Meteor.Collection('cards');
-Players = new Meteor.Collection('players');
+Players = new Meteor.Collection('players'); // waiting player
 
 if (Meteor.isClient) {
   var buttonEnabled = false;
   var allowRemoval = false;
+  var waitingForPlayer = false;
+  var user=null;
   
-  // activating the battleButton
-  function toggleButton(bool) {
-    buttonEnabled=bool;
-    if(bool) 
-      $('#battleButton').removeClass('inactiveButton');
-    else
-      $('#battleButton').addClass('inactiveButton');
-  }
+  Template.players.events({
+    "keydown #username": function(event){
+      if(event.which == 13){
 
-  function clearActiveCard(card) {
-    if(allowRemoval) {
-      card.empty();
-      allowRemoval=false;
+        user = $('#username').val();
+
+        console.log("Username is " + user);
+
+        // waiting players
+        Players.insert( {username: user} );
+
+        $('#loginInfo').hide();
+        waitingForPlayer = true;
+      } 
+    },
+
+    'click .playerLabel': function(event){
+      if (waitingForPlayer) {
+        var cPlayer = $(event.target);
+        cPlayer.parent().children().each(function(idx, x) { $(x).removeClass('chosenPlayer'); });
+        cPlayer.addClass('chosenPlayer');
+      }
     }
-  }
+  });
 
-  Template.cards.helpers(
-  {
+  Template.players.helpers({
+    players: function() {
+      console.log("user is:"+user);
+      return Players.find({ username: {$ne: user} });
+    },
+    isUser: function() {
+      return this.username !== user;
+    }
+  });
+
+  Template.cards.helpers({
     cards: function() {
       return Cards.find();
     }
-  }
-  );
+  });
 
   Template.cards.events({
-
     'click .activeCard': function(event) {
       var yourHand = $('#yourHand');
       var cCard = $(event.target).parent();
@@ -75,19 +93,28 @@ if (Meteor.isClient) {
       }
     }
   });
+  // activating the battleButton
+  function toggleButton(bool) {
+    buttonEnabled=bool;
+    if(bool) 
+      $('#battleButton').removeClass('inactiveButton');
+    else
+      $('#battleButton').addClass('inactiveButton');
+  }
+
+  function clearActiveCard(card) {
+    if(allowRemoval) {
+      card.empty();
+      allowRemoval=false;
+    }
+  }
 
 }
 
-Meteor.setInterval(function() {
-  if(Session.get('user')) {
-    GameStream.emit('keepalive', Session.get('user'));
-  }
-}, 5000);
-
 if (Meteor.isServer) {
   Meteor.startup(function () {
-    Players.insert( {username: "Anonymous"} );
     Cards.remove( {} );
+    Players.remove( {} );
     Cards.insert( {cardname: "Michael Jacksson",    attack: 10, defense: 2,   url: "http://i2.cdnds.net/13/12/618x867/michael-jackson-mugshot.jpg" } );
     Cards.insert( {cardname: "Ozzy Osbourne",       attack: 3,  defense: 7,   url: "http://cps-static.rovicorp.com/3/JPG_400/MI0003/538/MI0003538195.jpg?partner=allrovi.com" } );
     Cards.insert( {cardname: "Mick Jagger",         attack: 5,  defense: 5,   url: "http://4.bp.blogspot.com/-dtv-4JoDabU/T-_onzjcwHI/AAAAAAAAAbU/TuG902lIGME/s320/mick-jagger-old_pic4_us1.jpg" } );

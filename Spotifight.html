@@ -6,13 +6,24 @@
 </head>
 
 <body>
-  {{> player}}
+  {{> players}}
   {{> cards}}
-  }
 </body>
 
-<template name="player">
-  Username: <input id="username" type="text" value="">
+<template name="players">
+  <div id="greyBG">
+    <div id="loginBox"> 
+      {{#each players}}
+        {{#if isUser}}
+          <p class="playerLabel">{{username}}</p>
+        {{/if}}
+       {{/each}}
+      <hr size="1" color="black">
+      <div id="loginInfo">
+        <p class="loginLabel">Username:</p> <input id="username" type="text" value="" placeholder="...">
+      </div>
+    </div>
+  </div>
 </template>
 
 <template name="cards">

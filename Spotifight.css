@@ -6,6 +6,53 @@ body {
 	text-align: center;
 }
 
+#greyBG {
+	display: block;
+	position: absolute;
+	background: rgba(0,0,0,0.6);
+	width: 100%;
+	height: 100%;
+	z-index: 3;
+}
+
+#loginBox {
+	display: block;
+	position: absolute;
+	padding: 20px;
+	width: 300px;
+	z-index: 4;
+	border: 1px solid #eee;
+	background: white;
+	left: 40%;
+	top: 30%;
+}
+
+.loginLabel {
+	font: 0.9em Helvetica;
+	font-weight: bold;
+	display: block;
+	float: left;
+	margin: 0 15px 0 0;
+	padding: 6px 0;
+}
+
+.playerLabel {
+	display: block;
+	border: 1px solid black;
+	padding: 8px 0;
+}
+
+.chosenPlayer {
+	background: #242424;
+	font-weight: bold;
+	color: white;
+}
+
+#username {
+	margin: 0;
+	padding: 6px;	
+}
+
 #backg {
 	display: inline-block;
 	position: relative;
