@@ -20,17 +20,6 @@ if (Meteor.isClient) {
     }
   });
 
-
-  function receiveMessage(event){
-      if (event.origin !== "http://localhost:3000") {
-          return;
-      }
-      if (authWindow) {
-          authWindow.close();
-      }
-      generateCards(event.data);
-  }
-
   function login() {
       console.log("I login()");
       var width = 400,
@@ -39,8 +28,8 @@ if (Meteor.isClient) {
       var top = (screen.height / 2) - (height / 2);
       
       var params = {
-          client_id: '5fe01282e94241328a84e7c5cc169164',
-          redirect_uri: 'http://jsfiddle.net/3744J/2/show/',
+          client_id: '6da341adbed94c3ea669dfa249804410',
+          redirect_uri: 'http://localhost:3000/callback',
           scope: 'user-read-private playlist-read-private',
           response_type: 'token'
       };
@@ -50,6 +39,34 @@ if (Meteor.isClient) {
           'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
           );
   }
+
+  function receiveMessage(event){
+      console.log("I receivemessage");
+      if (event.origin !== "http://localhost:3000") {
+          return;
+      }
+      if (authWindow) {
+          console.log("Stänger")
+          authWindow.close();
+      }
+      generateCards(event.data);
+  }
+
+  window.addEventListener("message", receiveMessage, false);
+
+  function toQueryString(obj) {
+    var parts = [];
+    for (var i in obj) {
+        if (obj.hasOwnProperty(i)) {
+            parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
+        }
+    }
+    return parts.join("&");
+  }
+
+  var authWindow = null;
+
+  var token = null;
 
   function generateCards(accessToken) {
     console.log("nein");
@@ -80,7 +97,6 @@ if (Meteor.isClient) {
         }
     });
   }
-  
 }
 
 if (Meteor.isServer) {
