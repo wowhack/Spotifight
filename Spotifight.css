@@ -6,6 +6,12 @@ body {
 	text-align: center;
 }
 
+.player {
+	font-size: 0.7em Helvetica;
+	margin: 0;
+	padding: 0.6em 0;
+}
+
 #backg {
 	display: inline-block;
 	position: relative;
@@ -81,7 +87,7 @@ body {
 #cardList {
 	list-style-type: none;
 	margin: 0;
-	padding: 20px 10px 0 10px;
+	padding: 0px 10px 0 10px;
 }
 
 /* Positioning end ------------ */

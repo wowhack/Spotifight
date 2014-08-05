@@ -12,7 +12,7 @@
 <template name="cards">
   <div id="backg">
     <div id="board">  
-      <div id="yourHand">
+      <div id="yourHand"> <p class="player">Player One</p>
         <div id="tempCard" style="display: none; position: absolute;"> </div>
         <ul id="cardList">
           {{#each cards}}
@@ -29,7 +29,7 @@
       </div>
       <div id="sharedArea">
         <div id="yourBattleArea">
-          <div class="activeCard"> 
+          <div id="playerOneActive" class="activeCard"> 
             <span class="cardname">[noname]</span>
             <div class="portrait" style="background-size: cover; background-position:center;"> 
               <p>Choose your card.</p>
@@ -42,11 +42,11 @@
           <input id="battleButton" class="inactiveButton confirmButton" type="button" value="Ready for battle">
         </div>
         <div id="opponentChoice"> 
-          <div class="hiddencard"> </div>
+          <div id="playerTwoActive" class="hiddencard"> </div>
         </div>
       </div>
 
-      <div id="opponentArea"> 
+      <div id="opponentArea"> <p class="player">Player Two</p>
         <ul id="cardList">
           <li><div class="hiddencard"> </div></li>
           <li><div class="hiddencard"> </div></li>
