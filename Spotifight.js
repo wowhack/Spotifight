@@ -4,8 +4,6 @@ var clientID = "6da341adbed94c3ea669dfa249804410";
 var clientSecret = "449b5590a223410dbf402fe7e174199b";
 var redirectURI = 'http://localhost:3000'; // Your redirect uri
 
-var authWindow = null;
-
 
 if (Meteor.isClient) {
   Template.cards.helpers({
@@ -40,6 +38,8 @@ if (Meteor.isClient) {
           );
   }
 
+  window.addEventListener("message", receiveMessage, false);
+
   function receiveMessage(event){
       console.log("I receivemessage");
       if (event.origin !== "http://localhost:3000") {
@@ -51,8 +51,6 @@ if (Meteor.isClient) {
       }
       generateCards(event.data);
   }
-
-  window.addEventListener("message", receiveMessage, false);
 
   function toQueryString(obj) {
     var parts = [];
@@ -69,31 +67,28 @@ if (Meteor.isClient) {
   var token = null;
 
   function generateCards(accessToken) {
-    console.log("nein");
+    token = accessToken;
+    // fetch my public playlists
     $.ajax({
-          url: 'https://api.spotify.com/v1/me',
-          headers: {
-              'Authorization': 'Bearer ' + accessToken
-          },
-          success: function(response) {
-              var data = response;
-              
-              $('div#login').hide();
-              $('div#loggedin').show();
-          }
-      });
-
-    $.ajax({
-        url: 'https://api.spotify.com/v1/users/' + user_id + '/playlist/' + playlist_id + '/tracks',
+        url: 'https://api.spotify.com/v1/me',
         headers: {
             'Authorization': 'Bearer ' + accessToken
         },
-        success: function(response) {
-            console.log(response);
-            tracks = response.items
-            for (var track in tracks) {
-              Cards.insert ({cardname: track.name, attack: track.popularity, defense: (100 - track.popularity), url: "lulz.com"})
-            }
+        success: function(response) {         
+            var user_id = response.id.toLowerCase();         
+            $.ajax({
+                url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists',
+                headers: {
+                    'Authorization': 'Bearer ' + accessToken
+                },
+                success: function(response) {
+                    console.log(response);
+                    playlistsListPlaceholder.innerHTML = playlistsListTemplate(response.items);
+                }
+            });
+         
+            $('div#login').hide();
+            $('div#loggedin').show();
         }
     });
   }
