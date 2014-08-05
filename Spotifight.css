@@ -89,7 +89,9 @@ body {
 
 /* Cardstuff ------------------------------ */ 
 .card,
-.activeCard {
+.activeCard,
+.hiddencard,
+#tempCard {
 	width: 150px;
 	height: 150px;
 	border: 1px solid #242424;
@@ -97,6 +99,10 @@ body {
 	background: #fff;
 	font: 0.7em Helvetica;
 	position: relative;
+}
+
+.hiddencard {
+	background: #444;
 }
 
 .cardname,

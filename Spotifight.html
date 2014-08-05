@@ -13,7 +13,7 @@
   <div id="backg">
     <div id="board">  
       <div id="yourHand">
-          <div id="tempCard" style="display: none; position: absolute;" class="card"> b </div>
+        <div id="tempCard" style="display: none; position: absolute;"> </div>
         <ul id="cardList">
           {{#each cards}}
           <li>
@@ -42,19 +42,17 @@
           <input id="battleButton" class="inactiveButton confirmButton" type="button" value="Ready for battle">
         </div>
         <div id="opponentChoice"> 
-          <div class="card hidden"> </div>
+          <div class="hiddencard"> </div>
         </div>
       </div>
 
-
-
       <div id="opponentArea"> 
         <ul id="cardList">
-          <li><div class="card hidden"></div></li>
-          <li><div class="card hidden"></div></li>
-          <li><div class="card hidden"></div></li>
-          <li><div class="card hidden"></div></li>
-          <li><div class="card hidden"></div></li>
+          <li><div class="hiddencard"> </div></li>
+          <li><div class="hiddencard"> </div></li>
+          <li><div class="hiddencard"> </div></li>
+          <li><div class="hiddencard"> </div></li>
+          <li><div class="hiddencard"> </div></li>
         </ul>
       </div>
     </div>

@@ -59,15 +59,19 @@ if (Meteor.isClient) {
         left: "+=172px"
       }, 300);
 
-      //activeCard.html( cCard.html() );
+      setTimeout(function() {
+        activeCard.html( cCard.html() );
+      }, 600);
+
       toggleButton(true);
       allowRemoval=true;
     },
 
     'click #battleButton': function(event) {
       var activeCard = $('.activeCard');
-      if(buttonEnabled)
-        console.log( $(activeCard) );
+      if(buttonEnabled) {
+        $(activeCard);
+      }
     }
   });
 
