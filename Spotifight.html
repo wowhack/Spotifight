@@ -12,27 +12,49 @@
 <template name="cards">
   <div id="backg">
     <div id="board">  
+      <div id="yourHand">
+        <ul id="cardList">
+          {{#each cards}}
+          <li>
+            <div class="card">
+              <span class="cardname">{{cardname}}</span>
+              <div class="portrait" style="background-image: url(' {{url}} ');"> </div>
+              <span class="attack">{{attack}}</span>
+              <span class="defense">{{defense}}</span>
+            </div>
+            </li>
+          {{/each}}
+        </ul>
+      </div>
       <div id="sharedArea">
-        <div class="activeCard"> 
-          <span class="cardname"></span>
-          <div class="portrait" style="background-size: cover; background-position:center;"> </div>
-          <span class="attack"></span>
-          <span class="defense"></span>
+        <div id="yourBattleArea">
+          <div class="activeCard"> 
+            <span class="cardname">[noname]</span>
+            <div class="portrait" style="background-size: cover; background-position:center;"> 
+              <p>Choose your card.</p>
+            </div>
+            <span class="attack">/</span>
+            <span class="defense">/</span>
+          </div>
         </div>
         <div id="choices">
-          <input class="confirmButton" type="button" value="Choose for Battle">
+          <input id="battleButton" class="inactiveButton confirmButton" type="button" value="Ready for battle">
+        </div>
+        <div id="opponentChoice"> 
+          <div class="card hidden"> b</div>
         </div>
       </div>
-      <div id="yourHand">
-        {{#each cards}}
-          <div class="card">
-            <span class="cardname">{{cardname}}</span>
-            <div class="portrait" style="background-size: cover; background-position:center; background-image: url(' {{url}} ');"> </div>
-            <span class="attack">{{attack}}</span>
-            <span class="defense">{{defense}}</span>
-          </div>
-        {{/each}}
-        <div id="pusher" style="width: 100%; display: inline-block;"> </div>
+
+
+
+      <div id="opponentArea"> 
+        <ul id="cardList">
+          <li><div class="card hidden"></div></li>
+          <li><div class="card hidden"></div></li>
+          <li><div class="card hidden"></div></li>
+          <li><div class="card hidden"></div></li>
+          <li><div class="card hidden"></div></li>
+        </ul>
       </div>
     </div>
   </div>
