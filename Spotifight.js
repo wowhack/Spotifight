@@ -41,7 +41,25 @@ if (Meteor.isClient) {
 
       var activeCard = $('.activeCard');
 
-      activeCard.html( cCard.html() );
+      var tempCard = $('#tempCard');
+
+      tempCard.css('top', cCard.position().top );
+      tempCard.css('left', cCard.position().left );
+
+      tempCard.show();
+
+      tempCard.html( cCard.html() );
+
+      tempCard.animate({
+        left: activeCard.position().left,
+        top: activeCard.position().top
+      }, 300);
+
+      tempCard.animate({
+        left: "+=172px"
+      }, 300);
+
+      //activeCard.html( cCard.html() );
       toggleButton(true);
       allowRemoval=true;
     },

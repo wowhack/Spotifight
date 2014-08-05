@@ -22,6 +22,10 @@ body {
 	border-right: 1px solid #ddd;
 }
 
+#tempCard{
+	z-index: 2;
+}
+
 #sharedArea {
 	display: block;
 	position: relative;
