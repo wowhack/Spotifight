@@ -1,4 +1,5 @@
 Cards = new Meteor.Collection('cards');
+Players = new Meteor.Collection('players');
 
 if (Meteor.isClient) {
   var buttonEnabled = false;
@@ -77,8 +78,15 @@ if (Meteor.isClient) {
 
 }
 
+Meteor.setInterval(function() {
+  if(Session.get('user')) {
+    GameStream.emit('keepalive', Session.get('user'));
+  }
+}, 5000);
+
 if (Meteor.isServer) {
   Meteor.startup(function () {
+    Players.insert( {username: "Anonymous"} );
     Cards.remove( {} );
     Cards.insert( {cardname: "Michael Jacksson",    attack: 10, defense: 2,   url: "http://i2.cdnds.net/13/12/618x867/michael-jackson-mugshot.jpg" } );
     Cards.insert( {cardname: "Ozzy Osbourne",       attack: 3,  defense: 7,   url: "http://cps-static.rovicorp.com/3/JPG_400/MI0003/538/MI0003538195.jpg?partner=allrovi.com" } );
@@ -87,4 +95,5 @@ if (Meteor.isServer) {
     Cards.insert( {cardname: "Hammerfall",          attack: 1,  defense: 14,  url: "http://upload.wikimedia.org/wikipedia/hr/c/c8/Hammerfall_logo.jpg" });
     //Cards.insert( {cardname: "Jonas Brothers",      attack: 0,  defense: 1,   url: "http://www.wallyc.com/wp-content/uploads/2014/05/jonas-brothers-wallpaper-5.jpg"} );
   });
+
 }
