@@ -13,85 +13,28 @@ if (Meteor.isClient) {
   });
 
   Template.generation.events({
-    'click #login': function(event) {
-      login();
+    'click #initButton': function(event) {
+      addCard ($("#songname").val());
     }
   });
 
-  function login() {
-      console.log("I login()");
-      var width = 400,
-          height = 500;
-      var left = (screen.width / 2) - (width / 2);
-      var top = (screen.height / 2) - (height / 2);
-      
-      var params = {
-          client_id: '6da341adbed94c3ea669dfa249804410',
-          redirect_uri: 'http://localhost:3000/callback',
-          scope: 'user-read-private playlist-read-private',
-          response_type: 'token'
-      };
-      authwindow = window.open(
-          "https://accounts.spotify.com/authorize?" + toQueryString(params),
-          "Spotify",
-          'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
-          );
   }
 
-  window.addEventListener("message", receiveMessage, false);
-
-  function receiveMessage(event){
-      console.log("I receivemessage");
-      if (event.origin !== "http://localhost:3000") {
-          return;
-      }
-      if (authWindow) {
-          console.log("Stänger")
-          authWindow.close();
-      }
-      generateCards(event.data);
-  }
-
-  function toQueryString(obj) {
-    var parts = [];
-    for (var i in obj) {
-        if (obj.hasOwnProperty(i)) {
-            parts.push(encodeURIComponent(i) + "=" + encodeURIComponent(obj[i]));
-        }
-    }
-    return parts.join("&");
-  }
-
-  var authWindow = null;
-
-  var token = null;
-
-  function generateCards(accessToken) {
-    token = accessToken;
+  function addCard(artist) {
     // fetch my public playlists
     $.ajax({
-        url: 'https://api.spotify.com/v1/me',
-        headers: {
-            'Authorization': 'Bearer ' + accessToken
+        url: 'https://api.spotify.com/v1/search',
+        data: {
+          q: artist,
+          type: 'track'
         },
         success: function(response) {         
-            var user_id = response.id.toLowerCase();         
-            $.ajax({
-                url: 'https://api.spotify.com/v1/users/' + user_id + '/playlists',
-                headers: {
-                    'Authorization': 'Bearer ' + accessToken
-                },
-                success: function(response) {
-                    console.log(response);
-                    playlistsListPlaceholder.innerHTML = playlistsListTemplate(response.items);
-                }
-            });
-         
-            $('div#login').hide();
-            $('div#loggedin').show();
+          console.log(response);
+          var tracks = response.tracks;
+          track = tracks.items[0]
+          Cards.insert({cardname: track.name, attack: track.popularity, defense: 100 - track.popularity, url: track.album.images[0].url});  
         }
     });
-  }
 }
 
 if (Meteor.isServer) {
