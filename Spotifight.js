@@ -45,9 +45,7 @@ if (Meteor.isClient) {
 
       tempCard.css('top', cCard.position().top );
       tempCard.css('left', cCard.position().left );
-
       tempCard.show();
-
       tempCard.html( cCard.html() );
 
       tempCard.animate({
