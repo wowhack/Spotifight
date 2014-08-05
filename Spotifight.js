@@ -4,6 +4,9 @@ var clientID = "6da341adbed94c3ea669dfa249804410";
 var clientSecret = "449b5590a223410dbf402fe7e174199b";
 var redirectURI = 'http://localhost:3000'; // Your redirect uri
 
+var authWindow = null;
+
+
 if (Meteor.isClient) {
   Template.cards.helpers({
     cards: function() {
@@ -12,9 +15,8 @@ if (Meteor.isClient) {
   });
 
   Template.generation.events({
-    'click #initButton': function(event) {
-      console.log("ttjo");
-      initiate();
+    'click #login': function(event) {
+      login();
     }
   });
 }
@@ -29,54 +31,62 @@ if (Meteor.isServer) {
   });
 }
 
-function initiate() {
-  console.log("tjenis");
- var user_id = $('#userID').val();
- var playlist_id = $('#playlistID').val(); 
- console.log("din mamma");
- 
- $.ajax({
-  url: 'https://accounts.spotify.com/authorize',
-  headers : {'Access-Control-Allow-Origin': redirectURI},
-  data: {
-    client_id : clientID,
-    response_type : 'code',
-    redirect_uri: redirectURI
-  },
-  success: function(response){ 
-    $.ajax({
-      url: 'https://accounts.spotify.com/api/token',
-      crossDomain: true,
-      data: {
-        grant_type : 'authorization_code',
-        code : response.code,
-        redirect_uri : redirectURI,
-        client_id : clientID,
-        client_secret : clientSecret
-      },
-      success: function(response) {
-        console.log(response)
-        var accessToken = response.access_token;
-        generateCards(user_id,playlist_id,accessToken);
-      }
-    })
-  }
- })
+function receiveMessage(event){
+    if (event.origin !== "http://localhost:3000") {
+        return;
+    }
+    if (authWindow) {
+        authWindow.close();
+    }
+    generateCards(event.data);
 }
 
-function generateCards(user_id,playlist_id,accessToken) {
+function login() {
+    console.log("I login()");
+    var width = 400,
+        height = 500;
+    var left = (screen.width / 2) - (width / 2);
+    var top = (screen.height / 2) - (height / 2);
+    
+    var params = {
+        client_id: '5fe01282e94241328a84e7c5cc169164',
+        redirect_uri: 'http://jsfiddle.net/3744J/2/show/',
+        scope: 'user-read-private playlist-read-private',
+        response_type: 'token'
+    };
+    authwindow = window.open(
+        "https://accounts.spotify.com/authorize?" + toQueryString(params),
+        "Spotify",
+        'menubar=no,location=no,resizable=no,scrollbars=no,status=no, width=' + width + ', height=' + height + ', top=' + top + ', left=' + left
+        );
+}
+
+function generateCards(accessToken) {
   console.log("nein");
   $.ajax({
-                url: 'https://api.spotify.com/v1/users/' + user_id + '/playlist/' + playlist_id + '/tracks',
-                headers: {
-                    'Authorization': 'Bearer ' + accessToken
-                },
-                success: function(response) {
-                    console.log(response);
-                    tracks = response.items
-                    for (var track in tracks) {
-                      Cards.insert ({cardname: track.name, attack: track.popularity, defense: (100 - track.popularity), url: "lulz.com"})
-                    }
-                }
-            });
+        url: 'https://api.spotify.com/v1/me',
+        headers: {
+            'Authorization': 'Bearer ' + accessToken
+        },
+        success: function(response) {
+            var data = response;
+            
+            $('div#login').hide();
+            $('div#loggedin').show();
+        }
+    });
+
+  $.ajax({
+      url: 'https://api.spotify.com/v1/users/' + user_id + '/playlist/' + playlist_id + '/tracks',
+      headers: {
+          'Authorization': 'Bearer ' + accessToken
+      },
+      success: function(response) {
+          console.log(response);
+          tracks = response.items
+          for (var track in tracks) {
+            Cards.insert ({cardname: track.name, attack: track.popularity, defense: (100 - track.popularity), url: "lulz.com"})
+          }
+      }
+  });
 }
