@@ -64,9 +64,7 @@ if (Meteor.isClient) {
 
       tempCard.css('top', cCard.position().top );
       tempCard.css('left', cCard.position().left );
-
       tempCard.show();
-
       tempCard.html( cCard.html() );
 
       tempCard.animate({
@@ -89,7 +87,9 @@ if (Meteor.isClient) {
     'click #battleButton': function(event) {
       var activeCard = $('.activeCard');
       if(buttonEnabled) {
-        $(activeCard);
+        buttonEnabled=false;
+        setPlayerChoiceDone();
+        waitForShowdown();
       }
     }
   });
@@ -109,17 +109,65 @@ if (Meteor.isClient) {
     }
   }
 
+  /* BATTLE LOGIC -------------- */
+
+  var playerOneChoice = $.Deferred();
+  var PlayerTwoChoice = $.Deferred();
+
+  function waitForShowdown() {
+    $.when(playerOneChoice,PlayerTwoChoice)
+    .then(function() {
+      
+    });
+  }
+
+  function showDown(cardOne, cardTwo) {
+
+    // deal dmg
+    cardOne.health -= cardTwo.attack;
+    cardTwo.health -= cardOne.attack;
+
+    if(cardOne.health <= 0) {
+      clearUserOne();
+    }
+
+    if(cardTwo.health <= 0) {
+      clearUserTwo();
+    }
+  }
+
+  function clearUserOne() {
+    $('#playerOneActive').name('0');
+    $('#playerOneActive').empty();
+  }
+
+  function clearUserTwo() {
+    $('#playerTwoActive').name('0');
+    $('#playerTwoActive').empty();
+  }
+
+
+  /* --------------------------- */
+
 }
 
 if (Meteor.isServer) {
   Meteor.startup(function () {
     Cards.remove( {} );
+<<<<<<< HEAD
     Players.remove( {} );
     Cards.insert( {cardname: "Michael Jacksson",    attack: 10, defense: 2,   url: "http://i2.cdnds.net/13/12/618x867/michael-jackson-mugshot.jpg" } );
     Cards.insert( {cardname: "Ozzy Osbourne",       attack: 3,  defense: 7,   url: "http://cps-static.rovicorp.com/3/JPG_400/MI0003/538/MI0003538195.jpg?partner=allrovi.com" } );
     Cards.insert( {cardname: "Mick Jagger",         attack: 5,  defense: 5,   url: "http://4.bp.blogspot.com/-dtv-4JoDabU/T-_onzjcwHI/AAAAAAAAAbU/TuG902lIGME/s320/mick-jagger-old_pic4_us1.jpg" } );
     Cards.insert( {cardname: "Def Leppard Drummer", attack: 14, defense: 1,   url: "http://s3.amazonaws.com/rapgenius/public-transport-guide.jpg" } );    
     Cards.insert( {cardname: "Hammerfall",          attack: 1,  defense: 14,  url: "http://upload.wikimedia.org/wikipedia/hr/c/c8/Hammerfall_logo.jpg" });
+=======
+    Cards.insert( {cardname: "Michael Jacksson",    attack: 10, defense: 2,   health: 2,  url: "http://i2.cdnds.net/13/12/618x867/michael-jackson-mugshot.jpg" } );
+    Cards.insert( {cardname: "Ozzy Osbourne",       attack: 3,  defense: 7,   health: 7,  url: "http://cps-static.rovicorp.com/3/JPG_400/MI0003/538/MI0003538195.jpg?partner=allrovi.com" } );
+    Cards.insert( {cardname: "Mick Jagger",         attack: 5,  defense: 5,   health: 5,  url: "http://4.bp.blogspot.com/-dtv-4JoDabU/T-_onzjcwHI/AAAAAAAAAbU/TuG902lIGME/s320/mick-jagger-old_pic4_us1.jpg" } );
+    Cards.insert( {cardname: "Def Leppard Drummer", attack: 14, defense: 1,   health: 14, url: "http://s3.amazonaws.com/rapgenius/public-transport-guide.jpg" } );    
+    Cards.insert( {cardname: "Hammerfall",          attack: 1,  defense: 14,  health: 14, url: "http://upload.wikimedia.org/wikipedia/hr/c/c8/Hammerfall_logo.jpg" });
+>>>>>>> battleLogic
     //Cards.insert( {cardname: "Jonas Brothers",      attack: 0,  defense: 1,   url: "http://www.wallyc.com/wp-content/uploads/2014/05/jonas-brothers-wallpaper-5.jpg"} );
   });
 
