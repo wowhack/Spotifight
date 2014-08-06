@@ -9,13 +9,14 @@ body {
 #greyBG {
 	display: block;
 	position: absolute;
-	background: rgba(0,0,0,0.6);
+	background: rgba(50,50,50,0.8);
 	width: 100%;
 	height: 100%;
 	z-index: 3;
 }
 
-#loginBox {
+#loginBox,
+#playersBox {
 	display: block;
 	position: absolute;
 	padding: 20px;
@@ -32,7 +33,8 @@ body {
 	font-weight: bold;
 	display: block;
 	float: left;
-	margin: 0 15px 0 0;
+	width: 100px;
+	margin: 0	;
 	padding: 6px 0;
 }
 
@@ -48,10 +50,18 @@ body {
 	color: white;
 }
 
-#username {
+#username,
+#username2 {
 	margin: 0;
 	padding: 6px;	
 }
+
+#username,
+#username2,
+.loginLabel {
+	margin-bottom: 12px;
+}
+
 .player {
 	font-size: 0.7em Helvetica;
 	margin: 0;

@@ -7,43 +7,49 @@ var redirectURI = 'http://localhost:3000'; // Your redirect uri
 
 
 if (Meteor.isClient) {
+
   var buttonEnabled = false;
   var allowRemoval = false;
   var waitingForPlayer = false;
-  var user=null;
-  
+  var user;
+
+  var playerOneChoice;
+  var playerTwoChoice;
+
+  function prepareGame() {
+  }
+
   Template.players.events({
-    "keydown #username": function(event){
-      if(event.which == 13){
+    "click #startButton": function(event){
+      if(event.which == 13)
+        var user1 = $.trim($('#username').val());
+        var user2 = $.trim($('#username2').val());
+        if ( user1 != '' && user2 != ''){
 
-        user = $('#username').val();
+          Players.insert({ username: user1, player: 0 });
+          Players.insert({ username: user2, player: 1 });
 
-        console.log("Username is " + user);
+          $('#loginBox').hide();
+          $('#greyBG').hide();
 
-        // waiting players
-        Players.insert( {username: user} );
+          $('#userSide').text( user1 );
+          $('#enemySide').text( user2 );
 
-        $('#loginInfo').hide();
-        waitingForPlayer = true;
-      } 
-    },
-
-    'click .playerLabel': function(event){
-      if (waitingForPlayer) {
-        var cPlayer = $(event.target);
-        cPlayer.parent().children().each(function(idx, x) { $(x).removeClass('chosenPlayer'); });
-        cPlayer.addClass('chosenPlayer');
-      }
+        } else {
+          alert("Please enter usernames for both players!");
+        }
     }
   });
 
   Template.players.helpers({
     players: function() {
-      console.log("user is:"+user);
-      return Players.find({ username: {$ne: user} });
+      return Players.find();
     },
-    isUser: function() {
-      return this.username !== user;
+    isPlayer1: function() {
+      return this.player === '0'; 
+    },
+    isPlayer2: function() {
+      return this.player === '1'; 
     }
   });
 
@@ -99,7 +105,6 @@ if (Meteor.isClient) {
       var activeCard = $('.activeCard');
       if(buttonEnabled) {
         buttonEnabled=false;
-        setPlayerChoiceDone();
         waitForShowdown();
       }
     }
@@ -122,14 +127,8 @@ if (Meteor.isClient) {
 
   /* BATTLE LOGIC -------------- */
 
-  var playerOneChoice = $.Deferred();
-  var PlayerTwoChoice = $.Deferred();
-
   function waitForShowdown() {
-    $.when(playerOneChoice,PlayerTwoChoice)
-    .then(function() {
-      
-    });
+    
   }
 
   function showDown(cardOne, cardTwo) {

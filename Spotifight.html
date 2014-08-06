@@ -11,8 +11,8 @@
 </body>
 
 <template name="generation">
-  <div id = "login">
-    <input id = 'songname' type = 'text' value = 'Godt'>
+  <div id="login">
+    <input id='songname' type = 'text' value = 'Godt'>
     <input id='initButton' type = 'button' value = 'Fedst'>
   </div>
 </template>
@@ -20,14 +20,12 @@
 <template name="players">
   <div id="greyBG">
     <div id="loginBox"> 
-      {{#each players}}
-        {{#if isUser}}
-          <p class="playerLabel">{{username}}</p>
-        {{/if}}
-       {{/each}}
-      <hr size="1" color="black">
       <div id="loginInfo">
-        <p class="loginLabel">Username:</p> <input id="username" type="text" value="" placeholder="...">
+        <p class="loginLabel">1st player:</p> <input id="username" class="username" type="text" value="" placeholder="...">
+        <p class="loginLabel">2nd players:</p> <input id="username2" class="username" type="text" value="" placeholder="...">
+      </div>
+      <div> 
+        <input type="button" id="startButton" class="confirmButton" value="Confirm">
       </div>
     </div>
   </div>
@@ -36,7 +34,7 @@
 <template name="cards">
   <div id="backg">
     <div id="board">  
-      <div id="yourHand"> <p class="player">Player One</p>
+      <div id="yourHand"> <p id="userSide" class="player">Player One</p>
         <div id="tempCard" style="display: none; position: absolute;"> </div>
         <ul id="cardList">
           {{#each cards}}
@@ -70,7 +68,7 @@
         </div>
       </div>
 
-      <div id="opponentArea"> <p class="player">Player Two</p>
+      <div id="opponentArea"> <p id="enemySide" class="player">Player Two</p>
         <ul id="cardList">
           <li><div class="hiddencard"> </div></li>
           <li><div class="hiddencard"> </div></li>
