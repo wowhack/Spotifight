@@ -10,7 +10,7 @@ var isDoneAlready = false;
 
 if (Meteor.isClient) {
 
-  $('#explosion').hide();
+
 
   var buttonEnabled = false;
   var allowRemoval = false;
@@ -76,6 +76,12 @@ if (Meteor.isClient) {
     $('body').append(firework2);
     $('body').append(firework3);
     $('body').append(firework4);
+
+    $('#userSide').hide();
+    $('#enemySide').hide();
+    $('#playerOneActive').hide();
+    $('#playerTwoActive').hide();
+    $('#choices').hide();
   }
 
   function bothChoicesDone() {
@@ -329,10 +335,14 @@ if (Meteor.isClient) {
       top: "45%"
     },1000);
 
-    $('body').append(explo);
+    setTimeout(function() {
+      $('#explosion').show();
+    },900);
+
     setTimeout(function() {
       $('#explosion').hide();
-    },100);
+    },1500);
+    
 
     setTimeout(function() {
       card1.animate({
@@ -343,8 +353,10 @@ if (Meteor.isClient) {
         top: "48%"
       },1000);
 
-      callback();
-      battleButton.fadeIn(1000);
+      setTimeout(function() {
+        callback();
+        battleButton.fadeIn(1000);
+      },1000);
 
     },1000);
   }
