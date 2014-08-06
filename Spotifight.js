@@ -10,6 +10,8 @@ var isDoneAlready = false;
 
 if (Meteor.isClient) {
 
+  $('#explosion').hide();
+
   var buttonEnabled = false;
   var allowRemoval = false;
   var waitingForPlayer = false;
@@ -29,16 +31,51 @@ if (Meteor.isClient) {
     });
   }
 
+  function newRound() {
+    console.log("nrOfCardsPlayerOne:"+nrOfCardsPlayerOne);
+    console.log("nrOfCardsPlayerTwo:"+nrOfCardsPlayerTwo);
+
+    $('#playerOneActive').empty();
+    $('#playerTwoActive').empty();
+
+    if(nrOfCardsPlayerOne <= 0) {
+      alert(Session.get('user2') + " has won! Congratulations.");
+      completionScreen();
+      return;
+    } 
+
+    if(nrOfCardsPlayerTwo <= 0) {
+      alert(Session.get('user1') + " has won! Congratulations.");
+      completionScreen();
+      return;
+    } 
+
+    Session.set('firstPlayerChoice', undefined);
+    Session.set('secondPlayerChoice', undefined);
+
+    swapPlayer();
+  }
+
   function swapPlayer() {
+    var nextPlayer = (Session.get('activePlayer') === Session.get('user1') ) ? Session.get('user2') : Session.get('user1'); 
     middleGround();
-    if( confirm("Time to swap Player!") ) {
-      if(Session.get('activePlayer') === Session.get('user1'))
-        Session.set('activePlayer',Session.get('user2'));
-      else
-        Session.set('activePlayer',Session.get('user1'));
+    if( confirm("Is the next player ready? It's " + nextPlayer + "'s turn") ) {
+      Session.set('activePlayer',nextPlayer);
     } else {
       swapPlayer();
     }
+  }
+
+  function completionScreen() {
+    var firework1 = '<img border="0" src="http://www.picgifs.com/graphics/f/fireworks/graphics-fireworks-654863.gif" style="display: block; position: absolute; left: 15%; top: 15%;"/>',
+        firework2 = '<img border="0" src="http://www.picgifs.com/graphics/f/fireworks/graphics-fireworks-654863.gif" style="display: block; position: absolute; left: 65%; top: 25%;"/>',
+        firework3 = '<img border="0" src="http://www.picgifs.com/graphics/f/fireworks/graphics-fireworks-654863.gif" style="display: block; position: absolute; left: 25%; top: 55%;"/>',
+        firework4 = '<img border="0" src="http://www.picgifs.com/graphics/f/fireworks/graphics-fireworks-654863.gif" style="display: block; position: absolute; left: 55%; top: 65%;"/>';
+
+    $('body').append(firework1);
+    $('body').append(firework2);
+    $('body').append(firework3);
+    $('body').append(firework4);
   }
 
   function bothChoicesDone() {
@@ -51,7 +88,8 @@ if (Meteor.isClient) {
 
   Template.players.events({
     "click #startButton": function(event){
-
+            console.log("nrOfCardsPlayerOne:"+nrOfCardsPlayerOne);
+            console.log("nrOfCardsPlayerTwo:"+nrOfCardsPlayerTwo);
         Session.set('firstPlayerChoice', undefined);
         Session.set('secondPlayerChoice', undefined);
 
@@ -120,26 +158,18 @@ if (Meteor.isClient) {
   Template.generation.events({
     'click #initButton': function(event) {
       if(Session.get('activePlayer') === Session.get('user1')) {
-        if (nrOfCardsPlayerOne >= 4) {
+        if (nrOfCardsPlayerOne >= 5) {
           Session.set("notEnoughCardsPlayerOne",false);
           checkIfDone();
         } else {
-          var c=true;
-          while (c){
-            c = addCard ($("#songname").val());
-          }
-          nrOfCardsPlayerOne++;
+          addCard($("#songname").val());
         }
       } else {
-        if (nrOfCardsPlayerTwo >= 4) {
+        if (nrOfCardsPlayerTwo >= 5) {
           Session.set("notEnoughCardsPlayerTwo",false);
           checkIfDone();
         } else {
-          var c=true;
-          while (c) {
-            c = addCard ($("#songname").val());
-          }
-          nrOfCardsPlayerTwo++;
+          addCard($("#songname").val());
         }
       }
       
@@ -180,6 +210,7 @@ if (Meteor.isClient) {
         });
 
       }
+      return;
     }
   });
 
@@ -194,30 +225,19 @@ if (Meteor.isClient) {
       else
         placeActiveCard = $('#playerTwoActive');
 
-/*
-      var tempCard = $('#tempCard');
-      tempCard.css('top', cCard.position().top );
-      tempCard.css('left', cCard.position().left );
-      tempCard.show();
-      tempCard.html( cCard.html() );
-
-      tempCard.animate({
-        left: activeCard.position().left,
-        top: activeCard.position().top
-      }, 300);
-
-      tempCard.animate({
-        left: "+=172px"
-      }, 300);
-*/
       setTimeout(function() {
         placeActiveCard.html( cCard.html() );
       }, 0);
 
-      if(Session.get('activePlayer') === Session.get('user1')) 
-        Session.set('firstPlayerChoice', $(cCard) );
-      else 
-        Session.set('secondPlayerChoice', $(cCard) );
+
+      if(Session.get('activePlayer') === Session.get('user1')) {
+        Session.set('firstPlayerChoice', $(cCard).html() );
+        $(cCard).attr('id','firstPlayerChoice');
+      }
+      else {
+        Session.set('secondPlayerChoice', $(cCard).html() );
+        $(cCard).attr('id','secondPlayerChoice');
+      }
 
       toggleButton(true);
       allowRemoval=true;
@@ -279,12 +299,14 @@ if (Meteor.isClient) {
     console.log(cardOne);
     console.log(cardTwo);
 
-    var dmgOnFirst = Math.floor(cardOne.attack / cardTwo.defense);
-    var dmgOnSecond = Math.floor(cardTwo.attack / cardOne.defense);
+    var dmgOnSecond = Math.floor(cardOne.attack+1 / cardTwo.defense+1);
+    var dmgOnFirst = Math.floor(cardTwo.attack+1 / cardOne.defense+1);
 
     if(dmgOnFirst === dmgOnSecond) {
       alert("Both fainted.");
     } else {
+      console.log("dmgOnFirst:"+dmgOnFirst);
+      console.log("dmgOnSecond:"+dmgOnSecond);
       if(dmgOnFirst > dmgOnSecond)
         clearUserOne();
       else
@@ -307,6 +329,11 @@ if (Meteor.isClient) {
       top: "45%"
     },1000);
 
+    $('body').append(explo);
+    setTimeout(function() {
+      $('#explosion').hide();
+    },100);
+
     setTimeout(function() {
       card1.animate({
         top: "20%"
@@ -323,17 +350,19 @@ if (Meteor.isClient) {
   }
 
   function clearUserOne() {
-    alert("Player one won.");    
+    alert(Session.get('user1') + " won this round.");    
     $('#playerOneActive').empty();
-    Session.get('secondPlayerChoice').remove();
+    $('#secondPlayerChoice').remove();
     nrOfCardsPlayerOne--;
+    newRound();
   }
 
   function clearUserTwo() {
-    alert("Player two won.");
+    alert(Session.get('user2') + " won this round.");
     $('#playerTwoActive').empty();
-    Session.get('firstPlayerChoice').remove();
+    $('#firstPlayerChoice').remove();
     nrOfCardsPlayerOne--;
+    newRound();
   }
 
 
@@ -359,6 +388,12 @@ if (Meteor.isClient) {
             return false; 
           }
           else {
+
+            if(Session.get('activePlayer') == Session.get('user1')) 
+              nrOfCardsPlayerOne++;
+            else 
+              nrOfCardsPlayerTwo++;
+
             Cards.insert({
               player: Session.get('activePlayer'), 
               cardname: track.name, 
