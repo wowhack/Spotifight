@@ -11,10 +11,12 @@
 </body>
 
 <template name="generation">
-  <div id = "login">
+  {{#if notEnoughCards}}
+  <div id = "addCard">
     <input id = 'songname' type = 'text' value = 'Godt'>
     <input id='initButton' type = 'button' value = 'Fedst'>
   </div>
+  {{/if}}
 </template>
 
 <template name="players">

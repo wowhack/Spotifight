@@ -1,6 +1,7 @@
 Cards = new Meteor.Collection('cards');
 Players = new Meteor.Collection('players'); // waiting player
 
+var nrOfCards = 0;
 var clientID = "6da341adbed94c3ea669dfa249804410";
 var clientSecret = "449b5590a223410dbf402fe7e174199b";
 var redirectURI = 'http://localhost:3000'; // Your redirect uri
@@ -52,10 +53,16 @@ if (Meteor.isClient) {
       return Cards.find();
     }
   });
+Session.set("notEnoughCards",true);
 
   Template.generation.events({
     'click #initButton': function(event) {
       addCard ($("#songname").val());
+      nrOfCards++;
+      if (nrOfCards >= 5) {
+        $("#addCard").fadeOut();
+        Session.set("notEnoughCards",false);
+      }
     }
   });
 
@@ -160,6 +167,8 @@ if (Meteor.isClient) {
 
   /* --------------------------- */
 
+  Template.generation.notEnoughCards = function(){
+    return Session.get("notEnoughCards");
   }
 
   function addCard(artist) {
@@ -170,13 +179,14 @@ if (Meteor.isClient) {
           q: artist,
           type: 'track'
         },
-        success: function(response) {         
+        success: function(response) {
           console.log(response);
           var tracks = response.tracks;
           track = tracks.items[0]
           Cards.insert({cardname: track.name, attack: track.popularity, defense: 100 - track.popularity, url: track.album.images[0].url});  
         }
     });
+}
 }
 
 if (Meteor.isServer) {
