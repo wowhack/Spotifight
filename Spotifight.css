@@ -19,6 +19,11 @@ body {
 
 #greyBG { display: block; }
 
+.userTitle {
+	font: 0.9em Helvetica;
+	font-weight: bold;
+}
+
 #loginBox,
 #addCard {
 	display: block;
@@ -33,6 +38,11 @@ body {
 }
 
 #addCard { display: none; }
+
+.songAddField {
+	margin: 15px 0;
+	padding: 6px 4px;
+}
 
 .loginLabel {
 	font: 0.9em Helvetica;
@@ -147,7 +157,8 @@ body {
 	width: 172px;
 }
 
-#cardList {
+#cardList,
+#cardList2 {
 	list-style-type: none;
 	margin: 0;
 	padding: 0px 10px 0 10px;
@@ -172,6 +183,28 @@ body {
 
 .hiddencard {
 	background: #444;
+}
+
+
+#playerOneActive,
+#playerTwoActive {
+	display: block;
+	left: 40%;
+	position: absolute;
+}
+
+#playerOneActive {
+	top: 20%;
+}
+
+#playerTwoActive {
+	top: 48%;
+}
+
+#battleButton {
+	position: absolute;
+	top: 40%;
+	left: 36%;
 }
 
 .cardname,
