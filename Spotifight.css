@@ -6,17 +6,21 @@ body {
 	text-align: center;
 }
 
-#greyBG {
-	display: block;
+#greyBG,
+#greyBG2 {
+	display: none;
 	position: absolute;
+	top: 0;
 	background: rgba(50,50,50,0.8);
 	width: 100%;
 	height: 100%;
 	z-index: 3;
 }
 
+#greyBG { display: block; }
+
 #loginBox,
-#playersBox {
+#addCard {
 	display: block;
 	position: absolute;
 	padding: 20px;
@@ -27,6 +31,8 @@ body {
 	left: 40%;
 	top: 30%;
 }
+
+#addCard { display: none; }
 
 .loginLabel {
 	font: 0.9em Helvetica;
@@ -138,6 +144,7 @@ body {
 	position: relative;
 	display: block;
 	float: left;
+	width: 172px;
 }
 
 #cardList {

@@ -1,6 +1,7 @@
 Cards = new Meteor.Collection('cards');
 Players = new Meteor.Collection('players'); // waiting player
 
+var nrOfCards = 0;
 var clientID = "6da341adbed94c3ea669dfa249804410";
 var clientSecret = "449b5590a223410dbf402fe7e174199b";
 var redirectURI = 'http://localhost:3000'; // Your redirect uri
@@ -21,7 +22,6 @@ if (Meteor.isClient) {
 
   Template.players.events({
     "click #startButton": function(event){
-      if(event.which == 13)
         var user1 = $.trim($('#username').val());
         var user2 = $.trim($('#username2').val());
         if ( user1 != '' && user2 != ''){
@@ -34,6 +34,12 @@ if (Meteor.isClient) {
 
           $('#userSide').text( user1 );
           $('#enemySide').text( user2 );
+
+          $('#addCard').show();
+          $('#greyBG2').show();
+
+          // first players turn
+          Session.set('activePlayer', user1);
 
         } else {
           alert("Please enter usernames for both players!");
@@ -58,10 +64,16 @@ if (Meteor.isClient) {
       return Cards.find();
     }
   });
+Session.set("notEnoughCards",true);
 
   Template.generation.events({
     'click #initButton': function(event) {
       addCard ($("#songname").val());
+      nrOfCards++;
+      if (nrOfCards >= 5) {
+        $("#addCard").fadeOut();
+        Session.set("notEnoughCards",false);
+      }
     }
   });
 
@@ -77,8 +89,8 @@ if (Meteor.isClient) {
 
       var activeCard = $('.activeCard');
 
+/*
       var tempCard = $('#tempCard');
-
       tempCard.css('top', cCard.position().top );
       tempCard.css('left', cCard.position().left );
       tempCard.show();
@@ -92,10 +104,10 @@ if (Meteor.isClient) {
       tempCard.animate({
         left: "+=172px"
       }, 300);
-
+*/
       setTimeout(function() {
         activeCard.html( cCard.html() );
-      }, 600);
+      }, 0);
 
       toggleButton(true);
       allowRemoval=true;
@@ -116,13 +128,6 @@ if (Meteor.isClient) {
       $('#battleButton').removeClass('inactiveButton');
     else
       $('#battleButton').addClass('inactiveButton');
-  }
-
-  function clearActiveCard(card) {
-    if(allowRemoval) {
-      card.empty();
-      allowRemoval=false;
-    }
   }
 
   /* BATTLE LOGIC -------------- */
@@ -159,6 +164,8 @@ if (Meteor.isClient) {
 
   /* --------------------------- */
 
+  Template.generation.notEnoughCards = function(){
+    return Session.get("notEnoughCards");
   }
 
   function addCard(artist) {
@@ -169,13 +176,14 @@ if (Meteor.isClient) {
           q: artist,
           type: 'track'
         },
-        success: function(response) {         
+        success: function(response) {
           console.log(response);
           var tracks = response.tracks;
-          track = tracks.items[0]
-          Cards.insert({cardname: track.name, attack: track.popularity, defense: 100 - track.popularity, url: track.album.images[0].url});  
+          track = tracks.items[0];
+          Cards.insert({player: Session.get('activePlayer'), cardname: track.name, attack: track.popularity, defense: 100 - track.popularity, url: track.album.images[0].url});  
         }
     });
+  }
 }
 
 if (Meteor.isServer) {
